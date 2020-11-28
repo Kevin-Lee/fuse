@@ -63,8 +63,7 @@ object RowParser {
         (i, row).right
     }
 
-  @SuppressWarnings(Array("org.wartremover.warts.Any"))
-  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
+  @SuppressWarnings(Array("org.wartremover.warts.Any", "org.wartremover.warts.AsInstanceOf"))
   def getAs[A]: RowParser[A] =
     new RowParser[A] {
       def parse(i: Int, row: Row): RowParserError \/ (Int, A) =

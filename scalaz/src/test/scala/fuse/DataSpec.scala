@@ -18,8 +18,7 @@ object DataSpec extends Properties {
     , example("As", testAs)
     )
 
-  @SuppressWarnings(Array("org.wartremover.warts.Any"))
-  @SuppressWarnings(Array("org.wartremover.warts.Null"))
+  @SuppressWarnings(Array("org.wartremover.warts.Any", "org.wartremover.warts.Null"))
   def testJoinLeftOuter: Result = {
     val s1 = StructType(List(
         StructField("a", StringType)

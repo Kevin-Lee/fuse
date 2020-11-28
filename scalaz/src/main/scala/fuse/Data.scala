@@ -54,8 +54,7 @@ class Data[A](val rows: Dataset[Row], val E: DataEncoder[A]) extends Serializabl
   def as[B](implicit EB: DataEncoder[B]): Data[B] =
     select(EB.schema.fieldNames.map(col(_)).toList)(EB)
 
-  @SuppressWarnings(Array("org.wartremover.warts.Any"))
-  @SuppressWarnings(Array("org.wartremover.warts.Null"))
+  @SuppressWarnings(Array("org.wartremover.warts.Any", "org.wartremover.warts.Null"))
   def joinLeftOuter[B](right: Data[B], on1: String, onRest: String*): Data[(A, Option[B])] = {
 
     val enc = new DataEncoder[(A, Option[B])] {
