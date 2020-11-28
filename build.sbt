@@ -1,16 +1,25 @@
-organization := "org.charleso"
-name := "fuse"
-version := "0.1.0"
+ThisBuild / organization := "org.charleso"
+ThisBuild / name := "fuse"
+ThisBuild / version := "0.1.0"
 
-scalaVersion := "2.11.12"
+ThisBuild / scalaVersion := "2.12.12"
 
-val sparkVersion  = "2.3.3"
+val sparkVersion  = "2.4.7"
 
-libraryDependencies ++= List(
+ThisBuild / libraryDependencies ++= List(
     "org.apache.spark" %% "spark-core" % sparkVersion % Provided
   , "org.apache.spark" %% "spark-sql"  % sparkVersion % Provided
-  , "org.scalaz" %% "scalaz-core" % "7.2.23"
-  , "hedgehog"  %% "hedgehog-sbt" % "6d369c1378941b701e7f2cfa1e8f9e10e38b3568" % Test
+  , "qa.hedgehog"  %% "hedgehog-sbt" % "0.5.1" % Test
   )
 
-testFrameworks := Seq(TestFramework("hedgehog.sbt.Framework"))
+ThisBuild / testFrameworks := Seq(TestFramework("hedgehog.sbt.Framework"))
+
+lazy val fuse = (project in file("."))
+  .aggregate(scalaz)
+
+lazy val scalaz = (project in file("scalaz"))
+  .settings(
+    libraryDependencies ++= Seq(
+      "org.scalaz" %% "scalaz-core" % "7.2.23"
+    )
+  )
