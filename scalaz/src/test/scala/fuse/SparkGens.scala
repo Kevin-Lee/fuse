@@ -85,8 +85,7 @@ object SparkGens {
       , 1 -> Gen.constant(FloatType)
       )
 
-  @SuppressWarnings(Array("org.wartremover.warts.Any"))
-  @SuppressWarnings(Array("org.wartremover.warts.Null"))
+  @SuppressWarnings(Array("org.wartremover.warts.Any", "org.wartremover.warts.Null"))
   def genRow(schema: StructType): Gen[Row] =
     sequence[Gen, Any](schema.fields.toList.map(sf =>
       Gen.frequency(
@@ -95,8 +94,7 @@ object SparkGens {
         )
     )).map(values => new catalyst.expressions.GenericRowWithSchema(values.toArray, schema))
 
-  @SuppressWarnings(Array("org.wartremover.warts.Any"))
-  @SuppressWarnings(Array("org.wartremover.warts.Recursion"))
+  @SuppressWarnings(Array("org.wartremover.warts.Any", "org.wartremover.warts.Recursion"))
   def genValue(dataType: DataType): Gen[Any] =
     (dataType match {
       case _: StringType => genString
