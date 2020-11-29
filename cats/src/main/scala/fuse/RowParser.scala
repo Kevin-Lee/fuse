@@ -46,19 +46,30 @@ object RowParser {
       override def flatMap[A, B](fa: RowParser[A])(f: A => RowParser[B]): RowParser[B] =
         fa.flatMap(f)
 
+      /**
+       * It is not stack safe.
+       *
+       * @param a
+       * @param f
+       * @tparam A
+       * @tparam B
+       * @return
+       */
+      @deprecated("It is not stack safe so do not use it.", since = "The beginning")
       override def tailRecM[A, B](a: A)(f: A => RowParser[Either[A, B]]): RowParser[B] = {
-        var newA: A = a
-        var result: Option[B] = none[B]
-        while (result.isEmpty) {
-          f(newA).map {
-            case Left(nextA) =>
-              newA = nextA
+        def tailRec(result: Either[A, B]): RowParser[B] =
+          result match {
             case Right(b) =>
-              result = b.some
+              RowParser.point(b)
+            case Left(next) =>
+              f(next).flatMap(
+                _.fold(
+                  nextA => tailRec(nextA.asLeft),
+                  b => tailRec(b.asRight)
+                )
+              )
           }
-        }
-        result.map(b => RowParser.point(b))
-          .getOrElse(throw new RuntimeException("There is a bug in Monad[RowParser].tailRecM logic"))
+        f(a).flatMap(tailRec)
       }
     }
 
