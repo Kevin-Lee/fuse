@@ -15,11 +15,18 @@ ThisBuild / libraryDependencies ++= List(
 ThisBuild / testFrameworks := Seq(TestFramework("hedgehog.sbt.Framework"))
 
 lazy val fuse = (project in file("."))
-  .aggregate(scalaz)
+  .aggregate(scalaz, cats)
 
 lazy val scalaz = (project in file("scalaz"))
   .settings(
     libraryDependencies ++= Seq(
       "org.scalaz" %% "scalaz-core" % "7.2.23"
+    )
+  )
+
+lazy val cats = (project in file("cats"))
+  .settings(
+    libraryDependencies ++= Seq(
+      "org.typelevel" %% "cats-core" % "2.3.0"
     )
   )
